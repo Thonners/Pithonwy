@@ -2,7 +2,7 @@ import board
 import busio
 import digitalio
 import adafruit_max31856
-from exceptions import ThermocoupleError, OpenThermocoupleError
+from .exceptions import ThermocoupleError, OpenThermocoupleError
 
 class Thermocouple:
     """ Thermocouple class to centrally handle error checking before distributing the temperature reading. """
@@ -15,6 +15,7 @@ class Thermocouple:
         # Note whether to ignore faults
         self.ignore_faults = ignore_faults
         
+        # TODO: Wrap this in a try/except block to handle PermissionErrors (and print a solution - add user to group that owns /dev/spidev0.*)
         # create a spi object
         spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
 
