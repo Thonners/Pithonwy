@@ -1,2 +1,3 @@
 SUBSYSTEMS=="spi", KERNEL=="spidev0.[0-1]", GROUP="spi"
-
+SUBSYSTEM=="mem", KERNEL=="mem", MODE="0660"
+SUBSYSTEM=="bcm2835-gpiomem", KERNEL=="gpiomem", GROUP="mem"
