@@ -1,0 +1,2 @@
+SUBSYSTEMS=="spi", KERNEL=="spidev0.[0-1]", GROUP="spi"
+
