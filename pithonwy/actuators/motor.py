@@ -9,6 +9,7 @@ Initial script from https://www.instructables.com/id/Driving-an-ESCBrushless-Mot
 """
 
 import time
+from time import sleep
 import pigpio
 
 class Motor:
@@ -72,3 +73,14 @@ class Motor:
         """ Stops the motor from running """
         self.pi.set_servo_pulsewidth(self.gpio_pwm_pin, 0)
         print("Motor should have stopped (or at least be spinning down) now.\n\nIf not, unplug the battery NOW!")
+
+    def spin_up(self,time=3, limit=0.5):
+        increment = 0.001
+        t_step_count = int(limit / increment)
+        t_step_size = time / t_step_count
+        for t_step in range(t_step_count):
+            value = increment * t_step
+            self.set_motor_speed(value)
+            sleep(t_step_size)
+        self.arm()
+
