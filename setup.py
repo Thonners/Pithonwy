@@ -6,12 +6,15 @@ setup(name='pithonwy',
       url='http://github.com/Thonners/Pithonwy',
       author='Mathonwy Thomas',
       author_email='mathonwy.thomas@gmail.com',
+      packages=['pithonwy', 'pithonwy.sensors','pithonwy.actuators','pithonwy.camera'],
       license='GPLv3',
-      packages=['pithonwy', 'pithonwy.sensors','pithonwy.motors','pithonwy.camera'],
       install_requires=[
-        'adafruit-circuitpython-max31856',
         'RPi.GPIO',
         'pigpio',
-        'picamera',
       ],
+      extras_require={
+        'Camera':['picamera'],
+        'Thermocouple':['adafruit-circuitpython-max31856'],
+        'Gyro/Accelerometer':['adafruit-circuitpython-mpu6050'],
+      }
       zip_safe=False)
