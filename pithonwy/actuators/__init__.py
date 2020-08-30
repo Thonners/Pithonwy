@@ -1,2 +1,2 @@
-from motor import Motor
-from servo import Servo
+from .motor import Motor
+from .servo import Servo

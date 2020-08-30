@@ -1,1 +1,1 @@
-from gyro import Gyro
+from .gyro import Gyro
