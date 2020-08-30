@@ -24,6 +24,7 @@ class Motor:
         self.min_value = esc_min_pulse_length
         # Set the PWM to 0 to start with so we're not armed
         self.pi.set_servo_pulsewidth(gpio_pin, 0)
+        self.speed = -1     # Init to -ve to show we're not even armed
         # Warning!
         print("Motor instance created. Please ensure the battery is currently DISCONNECTED")
 
@@ -68,13 +69,24 @@ class Motor:
         pulse_width = self.min_value + speed*(self.max_value - self.min_value)
         # Set the speed
         self.pi.set_servo_pulsewidth(self.gpio_pin, pulse_width)
+        self.speed = speed
 
-    def stop(self):
-        """ Stops the motor from running """
+    def estop(self):
+        """ Emergency Stop. Immediately set the motor speed demand to zero
+        
+            NOTE: This has no guarantee of actually stopping the momentum of the motor or whatever it was powering!
+        """
         self.pi.set_servo_pulsewidth(self.gpio_pin, 0)
         print("Motor should have stopped (or at least be spinning down) now.\n\nIf not, unplug the battery NOW!")
 
-    def spin_up(self,time=3, limit=0.5):
+    def spin_up(self,time=3, limit=0.5, stop_after_initial_spin=True):
+        """ Spin up the motor gradually to avoid any sudden loads/shocks 
+        
+            Parameters: 
+                time: the time over which to spin up
+                limit: the max value to spin up to
+                stop_after_initial_spin: whether to stop the motor again after the initial spin-up has completed
+        """
         increment = 0.001
         t_step_count = int(limit / increment)
         t_step_size = time / t_step_count
@@ -82,5 +94,18 @@ class Motor:
             value = increment * t_step
             self.set_motor_speed(value)
             sleep(t_step_size)
-        self.arm()
+        if stop_after_initial_spin:
+            self.arm()
 
+    def spin_down(self,time=0.5):
+        """ Slowly spin down the motor to avoid any sudden loads/shocks """
+        original_speed = self.speed
+        increment = 0.001
+        t_step_count = int(original_speed / increment)
+        t_step_size = time / t_step_count
+        for t_step in range(t_step_count):
+            value = original_speed - (increment * t_step)
+            self.set_motor_speed(value)
+            sleep(t_step_size)
+        # Finish by forcing to 0
+        self.arm()
