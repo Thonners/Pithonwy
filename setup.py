@@ -16,5 +16,5 @@ setup(name='pithonwy',
         'Camera':['picamera'],
         'Thermocouple':['adafruit-circuitpython-max31856'],
         'Gyro/Accelerometer':['adafruit-circuitpython-mpu6050'],
-      }
+      },
       zip_safe=False)
