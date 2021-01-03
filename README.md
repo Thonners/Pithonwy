@@ -13,3 +13,5 @@ Gyro: Adafruit MPU6050
 Thermocouple: Adafruit MAX31856
 
 To use other versions, simply install the relevant circuit-python packages and update the `import ` statements in the appropriate script.
+
+NOTE: If there are issues building the RPi.GPIO modules (required for some of the adafruit packages), try setting `export CFLAGS=-fcommon` before the pip installation. This is requried after a change in the default comiplation flags behaviour of gcc (v10+ (?))
